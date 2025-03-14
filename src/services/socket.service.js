@@ -3,7 +3,8 @@ const { Server } = require("socket.io")
 
 const connectSocket = function(server){
     const io = new Server(server,{
-        cors: "*"
+        origin: "http://3.108.59.122:3000",
+        methods: ["GET", "POST"]
     });
 
     io.on("connection", function(socket){
@@ -19,6 +20,11 @@ const connectSocket = function(server){
             let time = new Date(Date.now()).toLocaleTimeString();
             io.to(room).emit("receiveMessage", {text:message,username,time})
         })
+
+        socket.on("disconnect", () => {
+            console.log("User disconnected:", socket.id);
+        });
+
     })
 
 }
