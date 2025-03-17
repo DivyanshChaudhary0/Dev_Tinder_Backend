@@ -40,7 +40,7 @@ const connectSocket = function (server) {
                 delete users[userId];    
             }
             
-            io.emit("offline", new Date().toLocaleTimeString());
+            io.emit("offline", new Date().toLocaleTimeString("en-US", { timeZone: "Asia/Kolkata" }));
             console.log("User disconnected:", socket.id);
         });
     });
