@@ -3,14 +3,14 @@ const {Router} = require("express");
 const router = Router();
 const userModel = require("../models/user.model")
 const bcrypt = require("bcrypt");
-const { userAuth } = require("../middlewares/userAuth");
+const { userAuth, loginValidation, registerValidation } = require("../middlewares/userAuth");
 const connectionModel = require("../models/connections.model");
 
 router.get("/",function(req,res){
     res.send("home page")
 })
 
-router.post("/login",async function(req,res){
+router.post("/login", loginValidation ,async function(req,res){
     try{
         const {email,password} = req.body;
 
@@ -55,18 +55,15 @@ router.post("/login",async function(req,res){
     }
 })
 
-router.post("/register",async function(req,res){
+router.post("/register", registerValidation ,async function(req,res){
     try{
-        const {username,email,password,age,gender,skills,about} = req.body;
+        const {username,email,password,age} = req.body;
         const hashed = await userModel.hashPassword(password)
         const user = await userModel.create({
             username,
             email,
             password: hashed,
             age,
-            gender,
-            skills: skills ? skills : [],
-            about,
         })
 
         const token = user.generateToken();

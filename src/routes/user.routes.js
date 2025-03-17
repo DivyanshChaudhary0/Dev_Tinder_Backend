@@ -3,6 +3,7 @@ const {Router} = require("express")
 const router = Router();
 const connectionModel = require("../models/connections.model")
 const {userAuth} = require("../middlewares/userAuth");
+const userModel = require("../models/user.model");
 
 router.get("/requests/receive", userAuth , async function(req,res){
     try{
@@ -51,6 +52,21 @@ router.get("/connections", userAuth , async function(req,res){
         res.status(400).json({
             error: err.message,
             message: "connections not found"
+        })
+    }
+})
+
+router.get("/findUser/:id", userAuth, async function(req,res){
+    try{
+        const id = req.params.id;
+        const user = await userModel.findById(id)
+        res.status(200).json({
+            user
+        })
+    }
+    catch(err){
+        res.status(400).json({
+            message: err.message
         })
     }
 })
