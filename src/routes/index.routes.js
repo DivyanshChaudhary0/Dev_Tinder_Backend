@@ -55,15 +55,61 @@ router.post("/login", loginValidation ,async function(req,res){
     }
 })
 
+router.post("/google-login", async function(req,res){
+    try{
+        const accessToken = req.body?.accessToken;
+        const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+        });
+        const userData = await response.json();
+
+        if (!userData.email) {
+            return res.status(401).json({ message: "Invalid Google Token" });
+        }
+
+        const {email,name,picture} = userData;
+
+        let user = await userModel.findOne({email});
+
+        if(!user){
+            user = await userModel.create({
+                username: name,
+                email,
+                photoURL: picture
+            })
+        }
+
+        let token = user.generateToken();
+        console.log(token);
+        
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Lax",
+        });
+
+        res.status(200).json({
+            user
+        })
+
+    }
+    catch(err){
+        res.status(500).json({
+            message: err.message
+        })
+    }
+})
+
 router.post("/register", registerValidation ,async function(req,res){
     try{
-        const {username,email,password,age} = req.body;
+        const {username,email,password} = req.body;
         const hashed = await userModel.hashPassword(password)
         const user = await userModel.create({
             username,
             email,
-            password: hashed,
-            age,
+            password: hashed
         })
 
         const token = user.generateToken();

@@ -18,7 +18,7 @@ router.get("/", userAuth ,function(req,res){
     }
 })
 
-router.patch("/edit", userAuth , async function(req,res){
+router.put("/edit", userAuth , async function(req,res){
     try{
         const updates = Object.keys(req.body)
         const allowedFields = ["username","age","photoURL","skills","about","gender"]
@@ -55,7 +55,7 @@ router.patch("/edit", userAuth , async function(req,res){
     }
 })
 
-router.patch("/password", userAuth ,async function(req,res){
+router.put("/password", userAuth ,async function(req,res){
     try{
         const {currentPassword,newPassword} = req.body;
 

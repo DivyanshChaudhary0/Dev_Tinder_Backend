@@ -29,7 +29,8 @@ const userSchema = new mongoose.Schema({
     },
     age: {
         type: Number,
-        min: 18
+        min: 18,
+        default: 18,
     },
     photoURL: {
         type: String,
