@@ -40,7 +40,11 @@ router.post("/login", loginValidation ,async function(req,res){
 
         const token = user.generateToken();
 
-        res.cookie("token",token);
+        res.cookie("token",token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Lax",
+        });
 
         res.status(200).json({
             message: "User login successfully",
@@ -82,7 +86,6 @@ router.post("/google-login", async function(req,res){
         }
 
         let token = user.generateToken();
-        console.log(token);
         
         res.cookie("token", token, {
             httpOnly: true,
