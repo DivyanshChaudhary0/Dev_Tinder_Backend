@@ -1,6 +1,6 @@
 const { Server } = require("socket.io");
 
-const users = {}; // Store users with their online status
+const users = {};
 
 const connectSocket = function (server) {
     const io = new Server(server, {
