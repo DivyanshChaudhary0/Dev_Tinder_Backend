@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 app.use(cors({
-    origin: "*",
+    origin: "https://dev-tinder-ui-pi.vercel.app/",
     credentials: true,
     methods: ["GET","POST","PUT","PATCH","DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]

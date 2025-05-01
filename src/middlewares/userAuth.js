@@ -5,7 +5,7 @@ const { body, validationResult } = require("express-validator");
 
 const userAuth = async (req,res,next)=>{
     try{
-        const token = req.cookies.token;
+        const token = req.cookies?.token;
         if(!token) return res.status(400).send("token is empty");
         const decode = jwt.verify(token,process.env.JWT_SECRET)
         const user = await userModel.findById(decode.id)
